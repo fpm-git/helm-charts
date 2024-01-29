@@ -2,12 +2,12 @@ apps:
   tooljet:
     service:
       type: ClusterIP
-      host: "http://tooljet.localhost"
+      host: "https://tooljet.fpinfra.net"
     deployment:
       image:
         repository: tooljet/tooljet
         pullPolicy: Always
-        tag: v2.23.0-ee2.9.2
+        tag: v2.27.6-ee2.12.0
       resources:
         requests:
           memory: "1000Mi"
@@ -15,94 +15,52 @@ apps:
         limits:
           memory: "2000Mi"
           cpu: "2000m"
-    hpa:
-      min: 1
-      max: 1
-      threshhold:
-        cpu: 0.75
-        ram: 768Mi
     secret:
       name: tooljet-server
-      data:
-        lockbox_key: "0123456789ABCDEF"
-        secret_key_base: "0123456789ABCDEF"
+      existingSecret: true
 
 ingress:
-  enabled: true
-  hostname: tooljet.localhost
-  ingressClassName: 'nginx'
-  kubernetes.io/ingress.class: "nginx"
-  annotations:
-    {}
-  tls: []
-# https://artifacthub.io/packages/helm/bitnami/postgresql#global-parameters
+  enabled: false
 
 postgresql:
-  enabled: true
-  postgresqlExtendedConf:
-    maxConnections: 1024
-  replication:
-    enabled: true
-  auth:
-    username: "postgres"
-    # Keys below are ignored if auth.existingSecret with key password is provided
-    postgresPassword: "postgres" # Password for the "postgres" admin user
-    password: "postgres"
-    database: "tooljet_production"
-  primary:
-    persistence:
-      enabled: true
-      size: 8Gi
-      storageClass: ""
+  enabled: false
 
 external_postgresql: #Please enter your external database vaules, Please set above posgtresql as false.
-  enabled: false
-  PG_HOST: #Database hostname
-  PG_USER: #Database username
-  PG_PASS: #Database password
-  PG_PORT: '"5432"'
+  enabled: true
 
 # Environment variables
 # Configure additional env variables down below
 # https://docs.tooljet.com/docs/setup/env-vars/
+# Everything in env is added to secret.yaml, or added to deployment if secret.existingSecret is true
 env:
   DEPLOYMENT_PLATFORM: "k8s:helm"
-  db_uri: "postgres://postgres:postgres@tooljet-postgresql.default.svc.cluster.local:5432/tooljet_db"
-  jwt_secret: "779ce303294a7d84a2aea9ff1ef1912f9ac57220a0dd2c0861a11ca5ae6c5817"
-  ENABLE_TOOLJET_DB: '"true"'
-  TOOLJET_DB_USER: "postgres"
-  TOOLJET_DB_HOST: "tooljet-postgresql"
-  TOOLJET_DB_PASS: "postgres"
+  ENABLE_TOOLJET_DB: true
   TOOLJET_DB: "tooljet_db"
   PGRST_HOST: "tooljet-postgrest.default.svc.cluster.local"
+  TOOLJET_DB_USER: "postgres"
+  TOOLJET_DB_HOST: "master.tooljet-postgres"
+  DISABLE_MULTI_WORKSPACE: true
+  PG_HOST: "master.tooljet-postgres"
+  PG_USER: "postgres"
+  PG_PORT: 5432
+  PG_DB: "tooljet"
 
 tooljetdb_external_postgresql:
-  enabled: false
-  TOOLJET_DB_USER:  #Database username
-  TOOLJET_DB_HOST: #Database hostname
-  TOOLJET_DB_PASS: #Database password
-  db_uri: #postgres://<postgres_username>:<postgres_password><@postgres_hostname>/<database_name>
+  enabled: true
 
 redis_pod:
-  REDIS_HOST: "redis-master"
+  REDIS_HOST: "master.tooljet-redis"
   REDIS_PORT: '"6379"'
 
 redis:
-  fullnameOverride: redis
-  usePassword: false
-  auth:
-    enabled: false  
+  enabled: false
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 image:
   repository: postgrest/postgrest
-  tag: v10.1.1.20221215
+  tag: latest
   pullPolicy: IfNotPresent
 
 postgrest:

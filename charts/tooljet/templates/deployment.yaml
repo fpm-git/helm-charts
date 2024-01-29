@@ -38,13 +38,7 @@ spec:
               value: "{{ .Values.apps.tooljet.service.host }}"
             {{ if .Values.external_postgresql.enabled }}
             - name: PG_HOST
-              value: "{{ .Values.external_postgresql.PG_HOST }}"
-            - name: PG_USER
-              value: "{{ .Values.external_postgresql.PG_USER }}"
-            - name: PG_PASS
-              value: "{{ .Values.external_postgresql.PG_PASS }}"
-            - name: PG_PORT
-              value: {{ .Values.external_postgresql.PG_PORT }}
+              value: "{{ .Values.env.PG_HOST }}"
             {{ else }}
             - name: PG_HOST
               value: "{{ .Release.Name }}-postgresql"
@@ -57,33 +51,8 @@ spec:
             {{- end }}
             {{- end }}
 
-            - name: ENABLE_TOOLJET_DB
-              value: {{ .Values.env.ENABLE_TOOLJET_DB }}
-
-            - name: TOOLJET_DB
-              value: {{ .Values.env.TOOLJET_DB }}
-
-            {{ if .Values.tooljetdb_external_postgresql.enabled }}
-            - name: TOOLJET_DB_HOST
-              value: "{{ .Values.tooljetdb_external_postgresql.TOOLJET_DB_HOST }}"
-            - name: TOOLJET_DB_PASS
-              value: "{{ .Values.tooljetdb_external_postgresql.TOOLJET_DB_PASS }}"
-            - name: TOOLJET_DB_USER
-              value: "{{ .Values.tooljetdb_external_postgresql.TOOLJET_DB_USER }}"
-            {{ else }}
-            - name: TOOLJET_DB_HOST
-              value: "{{ .Values.env.TOOLJET_DB_HOST }}"
-            - name: TOOLJET_DB_USER
-              value: "{{ .Values.env.TOOLJET_DB_USER }}"
-            - name: TOOLJET_DB_PASS
-              value: "{{ .Values.env.TOOLJET_DB_PASS }}"
-            {{- end }}
-
             - name: PGRST_HOST
               value: "tooljet-postgrest-service"
-
-            - name: PGRST_JWT_SECRET
-              value: {{ .Values.env.jwt_secret }}
 
             - name: REDIS_HOST
               value: {{ .Values.redis_pod.REDIS_HOST }}
@@ -91,8 +60,17 @@ spec:
               value: {{ .Values.redis_pod.REDIS_PORT }}
             - name: REDIS_USER
               value: {{ .Values.redis_pod.REDIS_USER }}
-            - name: REDIS_PASSWORD
-              value: {{ .Values.redis_pod.REDIS_PASSWORD }}
+
+            #if managing secrets manually, add all env vars here
+            {{- if .Values.apps.tooljet.secret.existingSecret }}
+            {{- range $key, $value := .Values.env }}
+            {{- if $value }}
+            - name: "{{ $key }}"
+              value: |-
+                {{ $value }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ .Values.apps.tooljet.secret.name }}

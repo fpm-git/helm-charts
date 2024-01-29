@@ -51,6 +51,12 @@ spec:
             {{- end }}
             {{- end }}
 
+            - name: PGRST_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.apps.tooljet.secret.name }}
+                  key: jwt_secret
+
             - name: PGRST_HOST
               value: "tooljet-postgrest-service"
 

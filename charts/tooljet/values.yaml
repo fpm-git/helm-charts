@@ -36,7 +36,6 @@ env:
   DEPLOYMENT_PLATFORM: "k8s:helm"
   ENABLE_TOOLJET_DB: true
   TOOLJET_DB: "tooljet_db"
-  PGRST_HOST: "tooljet-postgrest.default.svc.cluster.local"
   TOOLJET_DB_USER: "postgres"
   TOOLJET_DB_HOST: "master.tooljet-postgres"
   DISABLE_MULTI_WORKSPACE: true

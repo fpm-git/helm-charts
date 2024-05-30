@@ -2,7 +2,7 @@ apps:
   tooljet:
     service:
       type: ClusterIP
-      host: "https://tooljet.fpinfra.net"
+      host: "https://tooljet.lmg.gg"
     deployment:
       image:
         repository: tooljet/tooljet

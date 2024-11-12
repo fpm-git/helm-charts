@@ -59,7 +59,7 @@ autoscaling:
 
 image:
   repository: postgrest/postgrest
-  tag: latest
+  tag: v12.2.0
   pullPolicy: IfNotPresent
 
 postgrest:

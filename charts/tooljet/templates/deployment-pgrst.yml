@@ -33,6 +33,9 @@ spec:
             - name: PGRST_HOST
               value: "tooljet-postgrest-service.default.svc.cluster.local"
 
+            - name: PGRST_DB_PRE_CONFIG
+              value: "postgrest.pre_config"
+
             - name: PGRST_DB_ANON_ROLE
               value: postgres              
 

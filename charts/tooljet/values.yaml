@@ -7,7 +7,7 @@ apps:
       image:
         repository: tooljet/tooljet
         pullPolicy: Always
-        tag: v3.0.1-ee-lts
+        tag: v3.0.24-ee-lts
       resources:
         requests:
           memory: "1000Mi"

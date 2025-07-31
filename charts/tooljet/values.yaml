@@ -48,7 +48,7 @@ tooljetdb_external_postgresql:
   enabled: true
 
 redis_pod:
-  REDIS_HOST: "tooljet-redis-master.tooljet-redis"
+  REDIS_HOST: "tooljet-dragonfly.tooljet-redis"
   REDIS_PORT: '"6379"'
 
 redis:

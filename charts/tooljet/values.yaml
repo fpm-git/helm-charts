@@ -20,7 +20,16 @@ apps:
       existingSecret: true
 
 ingress:
-  enabled: false
+  enabled: true
+  hostname: tooljet.fpinfra.net
+  annotations:
+    "kubernetes.io/ingress.class": "traefik"
+    "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
+    "traefik.ingress.kubernetes.io/router.tls": "true"
+  tls:
+    - secretName: floatplane-com-cf
+      hosts:
+        - tooljet.fpinfra.net
 
 postgresql:
   enabled: false

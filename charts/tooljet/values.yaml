@@ -27,7 +27,7 @@ ingress:
     "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
     "traefik.ingress.kubernetes.io/router.tls": "true"
   tls:
-    - secretName: floatplane-com-cf
+    - secretName: fpinfra-net-cf-cert
       hosts:
         - tooljet.fpinfra.net
 

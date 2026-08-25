@@ -37,9 +37,9 @@ env:
   ENABLE_TOOLJET_DB: true
   TOOLJET_DB: "tooljet_db"
   TOOLJET_DB_USER: "postgres"
-  TOOLJET_DB_HOST: "master.tooljet-postgres"
+  TOOLJET_DB_HOST: "acid-tooljet.tooljet-postgres"
   DISABLE_MULTI_WORKSPACE: true
-  PG_HOST: "master.tooljet-postgres"
+  PG_HOST: "acid-tooljet.tooljet-postgres"
   PG_USER: "postgres"
   PG_PORT: 5432
   PG_DB: "tooljet"
